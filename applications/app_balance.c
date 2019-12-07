@@ -222,7 +222,6 @@ static THD_FUNCTION(balance_thread, arg) {
 
 				// edit by F. Hochberg
 				integral = 0;
-				//servo_simple_set_output(1.0);
 				// end edit
 				break;
 			case (RUNNING):
@@ -295,7 +294,7 @@ static THD_FUNCTION(balance_thread, arg) {
 				}else {
 					mc_interface_set_current(pid_value);
 				}
-				//servo_simple_set_output(0.7);
+				
 				// EDIT by F. Hochberg
 				if (mc_interface_get_tot_current_in_filtered() >= 0.0) {
 					if (mc_interface_get_speed() > 0.0) {
@@ -303,9 +302,7 @@ static THD_FUNCTION(balance_thread, arg) {
 					} else {
 						servo_simple_set_output(0.7);
 					}
-				}//else {
-					//servo_simple_set_output(1.0);
-				//b}
+				}
 				// end EDIT
 
 				break;
@@ -321,7 +318,6 @@ static THD_FUNCTION(balance_thread, arg) {
 					// end edit
 					break;
 				}
-			    //servo_simple_set_output(0.7);
 				// Disable output
 				mc_interface_set_current(0);
 				break;
@@ -337,9 +333,5 @@ static THD_FUNCTION(balance_thread, arg) {
 
 
 	}
-	// edit by F. Hochberg
-	//servo_simple_set_output(1.0);
-	// end edit
-	// Disable output
 	mc_interface_set_current(0);
 }
