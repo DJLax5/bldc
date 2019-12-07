@@ -219,6 +219,11 @@ static THD_FUNCTION(balance_thread, arg) {
 				state = FAULT;
 				startup_start_time = 0;
 				startup_diff_time = 0;
+
+				// edit by F. Hochberg
+				integral = 0;
+				//servo_simple_set_output(1.0);
+				// end edit
 				break;
 			case (RUNNING):
 				// Check for overspeed
@@ -290,6 +295,19 @@ static THD_FUNCTION(balance_thread, arg) {
 				}else {
 					mc_interface_set_current(pid_value);
 				}
+				//servo_simple_set_output(0.7);
+				// EDIT by F. Hochberg
+				if (mc_interface_get_tot_current_in_filtered() >= 0.0) {
+					if (mc_interface_get_speed() > 0.0) {
+						servo_simple_set_output(0.0);
+					} else {
+						servo_simple_set_output(0.7);
+					}
+				}//else {
+					//servo_simple_set_output(1.0);
+				//b}
+				// end EDIT
+
 				break;
 			case (FAULT):
 				// Check for valid startup position and switch state
@@ -298,9 +316,12 @@ static THD_FUNCTION(balance_thread, arg) {
 					setpoint_target = 0;
 					setpointAdjustmentType = CENTERING;
 					state = RUNNING;
+					// edit by F. Hochberg
+					integral = 0;
+					// end edit
 					break;
 				}
-
+			    //servo_simple_set_output(0.7);
 				// Disable output
 				mc_interface_set_current(0);
 				break;
@@ -312,8 +333,13 @@ static THD_FUNCTION(balance_thread, arg) {
 
 		// Delay between loops
 		chThdSleepMicroseconds((int)((1000.0 / balance_conf.hertz) * 1000.0));
-	}
 
+
+
+	}
+	// edit by F. Hochberg
+	//servo_simple_set_output(1.0);
+	// end edit
 	// Disable output
 	mc_interface_set_current(0);
 }

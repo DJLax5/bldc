@@ -61,7 +61,7 @@ void servo_simple_init(void) {
 
 	TIM_ARRPreloadConfig(HW_ICU_TIMER, ENABLE);
 
-	servo_simple_set_output(0.5);
+	servo_simple_set_output(0.7);
 
 	TIM_Cmd(HW_ICU_TIMER, ENABLE);
 }
